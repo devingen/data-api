@@ -45,10 +45,10 @@ make deploy-mentornity
 
 ### Adding local dependency
 
-Add `replace` config to go.mod before require parts.
+Add `replace` config to go.mod before require.
 
 ```
-replace github.com/devingen/api-cor => ../api-core
+replace github.com/devingen/api-core => ../api-core
 ```
 
 ### Releasing a new version
@@ -56,6 +56,6 @@ replace github.com/devingen/api-cor => ../api-core
 Create a git tag with the desired version and push the tag.
 
 ```
-git tag -a v0.0.2 -m "add collection lookup model"
-git push origin v0.0.2
+git tag -a v0.0.1 -m "initial version"
+git push origin v0.0.1
 ```
