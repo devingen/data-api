@@ -1,0 +1,85 @@
+[
+  {
+    "_id": "1",
+    "title": "Group One",
+    "members": [
+      {
+        "_id": "3",
+        "_collection": "users"
+      }
+    ],
+    "space": {
+      "_id": "1",
+      "_collection": "spaces"
+    },
+    "status": "active",
+    "tags": ["startup", "finance"]
+  },
+  {
+    "_id": "2",
+    "title": "Group Two",
+    "members": [
+      {
+        "_id": "4",
+        "_collection": "users"
+      },
+      {
+        "_id": "5",
+        "_collection": "users"
+      }
+    ],
+    "space": {
+      "_id": "1",
+      "_collection": "spaces"
+    },
+    "status": "passive",
+    "tags": ["startup", "automotive"]
+  },
+  {
+    "_id": "3",
+    "title": "Group Three",
+    "members": [
+      {
+        "_id": "6",
+        "_collection": "users"
+      },
+      {
+        "_id": "7",
+        "_collection": "users"
+      }
+    ],
+    "space": {
+      "_id": "1",
+      "_collection": "spaces"
+    },
+    "status": "active",
+    "tags": ["startup", "automotive"]
+  },
+  {
+    "_id": "4",
+    "title": "Group Four",
+    "members": [],
+    "space": {
+      "_id": "2",
+      "_collection": "spaces"
+    },
+    "status": "active",
+    "tags": []
+  },
+  {
+    "_id": "5",
+    "title": "Group Five",
+    "space": {
+      "_id": "2",
+      "_collection": "spaces"
+    },
+    "status": "passive",
+    "tags": []
+  },
+  {
+    "_id": "6",
+    "title": "Group Six",
+    "status": "passive",
+    "tags": []
+  }
+]

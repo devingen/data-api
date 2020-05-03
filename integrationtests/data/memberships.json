@@ -1,0 +1,93 @@
+[
+  {
+    "_id": "1",
+    "role": "admin",
+    "space": {
+      "_id": "1",
+      "_collection": "spaces"
+    },
+    "user": {
+      "_id": "1",
+      "_collection": "users"
+    },
+    "status": "active"
+  },
+  {
+    "_id": "2",
+    "role": "admin",
+    "space": {
+      "_id": "1",
+      "_collection": "spaces"
+    },
+    "user": {
+      "_id": "2",
+      "_collection": "users"
+    },
+    "status": "active"
+  },
+  {
+    "_id": "3",
+    "role": "admin",
+    "space": {
+      "_id": "1",
+      "_collection": "spaces"
+    },
+    "user": {
+      "_id": "3",
+      "_collection": "users"
+    },
+    "status": "ended"
+  },
+  {
+    "_id": "4",
+    "role": "entrepreneur",
+    "space": {
+      "_id": "1",
+      "_collection": "spaces"
+    },
+    "user": {
+      "_id": "3",
+      "_collection": "users"
+    },
+    "status": "active"
+  },
+  {
+    "_id": "5",
+    "role": "entrepreneur",
+    "space": {
+      "_id": "1",
+      "_collection": "spaces"
+    },
+    "user": {
+      "_id": "4",
+      "_collection": "users"
+    },
+    "status": "active"
+  },
+  {
+    "_id": "6",
+    "role": "entrepreneur",
+    "space": {
+      "_id": "2",
+      "_collection": "spaces"
+    },
+    "user": {
+      "_id": "5",
+      "_collection": "users"
+    },
+    "status": "ended"
+  },
+  {
+    "_id": "7",
+    "role": "entrepreneur",
+    "space": {
+      "_id": "2",
+      "_collection": "spaces"
+    },
+    "user": {
+      "_id": "6",
+      "_collection": "users"
+    },
+    "status": "active"
+  }
+]

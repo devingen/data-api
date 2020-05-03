@@ -1,0 +1,80 @@
+[
+  {
+    "_id": "1",
+    "email": "user1@devingen.io",
+    "firstName": "User",
+    "lastName": "One",
+    "imageUrl": "http://image.com/user-1",
+    "city": "Istanbul"
+  },
+  {
+    "_id": "2",
+    "email": "user2@devingen.io",
+    "firstName": "User",
+    "lastName": "Two",
+    "imageUrl": "http://image.com/user-2",
+    "city": "Istanbul"
+  },
+  {
+    "_id": "3",
+    "email": "user3@devingen.io",
+    "firstName": "User",
+    "lastName": "Three",
+    "imageUrl": "http://image.com/user-3",
+    "city": "London"
+  },
+  {
+    "_id": "4",
+    "email": "user4@devingen.io",
+    "firstName": "User",
+    "lastName": "Four",
+    "imageUrl": "http://image.com/user-4"
+  },
+  {
+    "_id": "5",
+    "email": "user5@devingen.io",
+    "firstName": "User",
+    "lastName": "Five",
+    "imageUrl": "http://image.com/user-5",
+    "city": "London"
+  },
+  {
+    "_id": "6",
+    "email": "user6@devingen.io",
+    "firstName": "User",
+    "lastName": "Six",
+    "imageUrl": "http://image.com/user-6",
+    "city": "Istanbul"
+  },
+  {
+    "_id": "7",
+    "email": "user7@devingen.io",
+    "firstName": "User",
+    "lastName": "Seven",
+    "imageUrl": "http://image.com/user-7",
+    "city": "London"
+  },
+  {
+    "_id": "8",
+    "email": "user8@devingen.io",
+    "firstName": "User",
+    "lastName": "Eight",
+    "imageUrl": "http://image.com/user-8"
+  },
+  {
+    "_id": "9",
+    "email": "user9@devingen.io",
+    "firstName": "User",
+    "lastName": "Nine",
+    "imageUrl": "http://image.com/user-9",
+    "city": "Istanbul"
+  },
+  {
+    "_id": "10",
+    "email": "user10@devingen.io",
+    "firstName": "User",
+    "lastName": "Ten",
+    "imageUrl": "http://image.com/user-10",
+    "city": "London"
+  }
+]

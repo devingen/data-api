@@ -1,0 +1,20 @@
+[
+  {
+    "_id": "1",
+    "domain": "space-1",
+    "title": "Space One",
+    "type": "incubator"
+  },
+  {
+    "_id": "2",
+    "domain": "space-2",
+    "title": "Space Two",
+    "type": "accelerator"
+  },
+  {
+    "_id": "3",
+    "domain": "space-3",
+    "title": "Space Three",
+    "type": "incubator"
+  }
+]
