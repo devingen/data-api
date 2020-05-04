@@ -8,4 +8,7 @@ clean:
 	rm -rf ./bin ./vendor Gopkg.lock
 
 deploy-mentornity: clean build
-	serverless deploy --stage mentornity --region eu-west-1 --verbose
+	serverless deploy --stage mentornity --region eu-central-1 --verbose
+
+teardown-mentornity: clean
+	serverless remove --stage mentornity --region eu-central-1 --verbose
