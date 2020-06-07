@@ -377,6 +377,51 @@ func (suite *QueriesTestSuite) TestReverseReferenceSingle() {
 	}
 }
 
+// Sort can only be used on the singular fields.
+// If the reference is saved in an array, this sort and limit doesn't work
+func (suite *QueriesTestSuite) TestReverseReferenceSingleWithSort() {
+	results, _, err := suite.service.Query(
+		suite.base,
+		"spaces",
+		&coremodel.QueryConfig{
+			Limit: 1000,
+			Fields: []coremodel.Field{
+				coremodel.New(coremodel.FieldTypeText, "title"),
+				coremodel.NewReverseReference(
+					"lastGroup",
+					"groups",
+					"space",
+					true,
+				).SetSort(&coremodel.SortConfig{
+					ID:    "createdAt",
+					Order: -1,
+				}).SetLimit(1).ToField(),
+			},
+		},
+	)
+	util.SaveResultFile("query-reverse-reference-single-with-sort", results)
+
+	assert.Nil(suite.T(), err)
+	assert.Equal(suite.T(), 3, len(results))
+
+	for _, item := range results {
+		group := item.GetChildDataModel("lastGroup")
+
+		// these spaces must have last groups
+		if item.GetID() == "1" || item.GetID() == "2" {
+			assert.NotNil(suite.T(), group)
+		}
+
+		if item.GetID() == "1" {
+			assert.NotNil(suite.T(), group)
+			assert.Equal(suite.T(), "3", group.GetID())
+		} else if item.GetID() == "2" {
+			assert.NotNil(suite.T(), group)
+			assert.Equal(suite.T(), "5", group.GetID())
+		}
+	}
+}
+
 func (suite *QueriesTestSuite) TestReverseReferenceSingleFields() {
 	results, _, err := suite.service.Query(
 		suite.base,

@@ -143,14 +143,36 @@ func (q *QueryPipeline) AddReference(fields []coremodel.Field, ref coremodel.Ref
 }
 
 func (q *QueryPipeline) AddReverseReference(fields []coremodel.Field, ref coremodel.ReverseReferenceField) {
-	*q = append(*q, bson.M{
-		"$lookup": bson.M{
-			"from":         ref.GetOtherCollection(),
-			"localField":   "_id",
-			"foreignField": ref.GetNameInOtherCollection() + "._id",
-			"as":           ref.GetID(),
-		},
-	})
+
+	// Sort can only be used on the singular fields.
+	// If the reference is saved in an array, this sort and limit doesn't work.
+	if ref.IsSingle() && ref.GetLimit() != 0 && ref.GetSort() != nil {
+		*q = append(*q, bson.M{
+			"$lookup": bson.M{
+				"from": ref.GetOtherCollection(),
+				"as":   ref.GetID(),
+				"let":  bson.M{"id": "$_id"},
+				"pipeline": bson.A{
+					bson.M{"$match": bson.M{"$expr": bson.M{
+						"$eq": bson.A{
+							"$$id", "$" + ref.GetNameInOtherCollection() + "._id",
+						}}},
+					},
+					bson.M{"$sort": bson.M{ref.GetSort().ID: ref.GetSort().Order}},
+					bson.M{"$limit": ref.GetLimit()},
+				},
+			},
+		})
+	} else {
+		*q = append(*q, bson.M{
+			"$lookup": bson.M{
+				"from":         ref.GetOtherCollection(),
+				"localField":   "_id",
+				"foreignField": ref.GetNameInOtherCollection() + "._id",
+				"as":           ref.GetID(),
+			},
+		})
+	}
 
 	// filter
 	if ref.GetFilter() != nil {

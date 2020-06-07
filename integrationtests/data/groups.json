@@ -13,7 +13,8 @@
       "_collection": "spaces"
     },
     "status": "active",
-    "tags": ["startup", "finance"]
+    "tags": ["startup", "finance"],
+    "createdAt": 1
   },
   {
     "_id": "2",
@@ -33,7 +34,8 @@
       "_collection": "spaces"
     },
     "status": "passive",
-    "tags": ["startup", "automotive"]
+    "tags": ["startup", "automotive"],
+    "createdAt": 2
   },
   {
     "_id": "3",
@@ -53,7 +55,8 @@
       "_collection": "spaces"
     },
     "status": "active",
-    "tags": ["startup", "automotive"]
+    "tags": ["startup", "automotive"],
+    "createdAt": 3
   },
   {
     "_id": "4",
@@ -64,7 +67,8 @@
       "_collection": "spaces"
     },
     "status": "active",
-    "tags": []
+    "tags": [],
+    "createdAt": 4
   },
   {
     "_id": "5",
@@ -74,12 +78,14 @@
       "_collection": "spaces"
     },
     "status": "passive",
-    "tags": []
+    "tags": [],
+    "createdAt": 5
   },
   {
     "_id": "6",
     "title": "Group Six",
     "status": "passive",
-    "tags": []
+    "tags": [],
+    "createdAt": 6
   }
 ]
