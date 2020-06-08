@@ -18,8 +18,10 @@ func NewPipeline() QueryPipeline {
 }
 
 func (q *QueryPipeline) AddLimit(limit int) {
-	//*q = append(*q, bson.M{"$limit": limit})
+	*q = append(*q, bson.M{"$limit": limit})
+}
 
+func (q *QueryPipeline) AddLimitWithMeta(limit int) {
 	// add total number meta
 	*q = append(*q, bson.M{
 		"$facet": bson.M{
@@ -144,9 +146,8 @@ func (q *QueryPipeline) AddReference(fields []coremodel.Field, ref coremodel.Ref
 
 func (q *QueryPipeline) AddReverseReference(fields []coremodel.Field, ref coremodel.ReverseReferenceField) {
 
-	// Sort can only be used on the singular fields.
-	// If the reference is saved in an array, this sort and limit doesn't work.
-	if ref.IsSingle() && ref.GetLimit() != 0 && ref.GetSort() != nil {
+	// Sort cannot be used if the reference data is saved in an array field.
+	if ref.GetLimit() != 0 && ref.GetSort() != nil {
 		*q = append(*q, bson.M{
 			"$lookup": bson.M{
 				"from": ref.GetOtherCollection(),
@@ -469,7 +470,69 @@ func (q *QueryPipeline) AddCollectionLookup(fields []coremodel.Field, ref coremo
 	}
 }
 
-func (service DatabaseService) Query(
+// BasicQuery doesn't generate metadata. It applies the skip and filter before the
+// relational fields are retrieved so it's more efficient than the AdvancedQuery.
+// It doesn't support sorting the main list based on the retrieved relations.
+func (service DatabaseService) BasicQuery(
+	base, collection string, config *coremodel.QueryConfig,
+) ([]*coremodel.DataModel, *coremodel.Meta, error) {
+	pipeline := NewPipeline()
+
+	if config.Filter != nil {
+		pipeline.AddMatch(config)
+	}
+
+	if config.Sort != nil {
+		for _, sort := range config.Sort {
+			pipeline.AddSort(sort.ID, sort.Order)
+		}
+	}
+
+	pipeline.AddSkip(config.Skip)
+
+	pipeline.AddLimit(config.Limit)
+
+	for _, field := range config.Fields {
+		if field.GetType() == coremodel.FieldTypeReference {
+			pipeline.AddReference(config.Fields, coremodel.ReferenceFromField(field))
+		} else if field.GetType() == coremodel.FieldTypeReverseReference {
+			pipeline.AddReverseReference(config.Fields, coremodel.ReverseReferenceFromField(field))
+		} else if field.GetType() == coremodel.FieldTypeRelationReference {
+			pipeline.AddRelationReference(config.Fields, coremodel.SingleRelationReferenceFromField(field))
+		} else if field.GetType() == coremodel.FieldTypeCollectionLookup {
+			pipeline.AddCollectionLookup(config.Fields, coremodel.CollectionLookupFieldFromField(field))
+		}
+	}
+
+	// filter the fields
+	pipeline.AddProject(config.Fields)
+
+	// do the sorting again because the pipelines above may change the order
+	if config.Sort != nil {
+		for _, sort := range config.Sort {
+			pipeline.AddSort(sort.ID, sort.Order)
+		}
+	}
+
+	result := make([]*coremodel.DataModel, 0)
+	err := service.Database.Aggregate(base, collection, pipeline, func(cur *mongo.Cursor) error {
+
+		var data coremodel.DataModel
+		err := cur.Decode(&data)
+		if err != nil {
+			return err
+		}
+		result = append(result, &data)
+		return nil
+	})
+
+	return result, nil, err
+}
+
+// AdvancedQuery generates the metadata. However for doing that, it does the sorting,
+// skipping and limiting after the relational fields are retrieved so it becomes memory
+// inefficient for some complex requests.
+func (service DatabaseService) AdvancedQuery(
 	base, collection string, config *coremodel.QueryConfig,
 ) ([]*coremodel.DataModel, *coremodel.Meta, error) {
 
@@ -502,7 +565,7 @@ func (service DatabaseService) Query(
 	// filter the fields
 	pipeline.AddProject(config.Fields)
 
-	pipeline.AddLimit(config.Limit)
+	pipeline.AddLimitWithMeta(config.Limit)
 
 	var response AggregateResult
 	err := service.Database.Aggregate(base, collection, pipeline, func(cur *mongo.Cursor) error {
@@ -524,4 +587,26 @@ func (service DatabaseService) Query(
 	}
 
 	return response.Results, meta, err
+}
+
+type QueryType string
+
+const (
+	QueryTypeAdvanced QueryType = "advanced"
+	QueryTypeBasic    QueryType = "basic"
+)
+
+func PickQueryType(config *coremodel.QueryConfig) QueryType {
+	// TODO return QueryTypeAdvanced when the main list is sorted based on relation data
+	return QueryTypeBasic
+}
+
+func (service DatabaseService) Query(
+	base, collection string, config *coremodel.QueryConfig,
+) ([]*coremodel.DataModel, *coremodel.Meta, error) {
+
+	if PickQueryType(config) == QueryTypeBasic {
+		return service.BasicQuery(base, collection, config)
+	}
+	return service.AdvancedQuery(base, collection, config)
 }

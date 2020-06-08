@@ -11,6 +11,8 @@ github.com/devingen/api-core v0.0.2 h1:LCRPz9GwPNynmWohTiNIIvq5SFpPpmeowZxb6XlGC
 github.com/devingen/api-core v0.0.2/go.mod h1:c0msK4Y+BvIe58adyvV3w70taSjIgCkGEHsH0hWzRUA=
 github.com/devingen/api-core v0.0.3 h1:dw48MFOvdy1j/PHHbaDTxsWMI/3Jl5Cs172gJs2bj5I=
 github.com/devingen/api-core v0.0.3/go.mod h1:c0msK4Y+BvIe58adyvV3w70taSjIgCkGEHsH0hWzRUA=
+github.com/devingen/api-core v0.0.4 h1:4KV/l2VjVuFPDk0T6IBs1PuBpv0Y/cxUcCUgl0qxVGk=
+github.com/devingen/api-core v0.0.4/go.mod h1:q1y8jEOu21IS4aTdDB/L463V6vG9+uXK+TcedeAhr04=
 github.com/go-stack/stack v1.8.0 h1:5SgMzNM5HxrEjV0ww2lTmX6E2Izsfxas4+YHWRs3Lsk=
 github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/melR3HDY=
 github.com/gobuffalo/attrs v0.0.0-20190224210810-a9411de4debd/go.mod h1:4duuawTqi2wkkpB4ePgWMaai6/Kc6WEz83bhFwpHzj0=
