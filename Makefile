@@ -12,3 +12,9 @@ deploy-mentornity: clean build
 
 teardown-mentornity: clean
 	serverless remove --stage mentornity --region eu-central-1 --verbose
+
+deploy-devingen: clean build
+	serverless deploy --stage devingen --region eu-central-1 --verbose
+
+teardown-devingen: clean
+	serverless remove --stage devingen --region eu-central-1 --verbose
