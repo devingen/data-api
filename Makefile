@@ -8,13 +8,19 @@ clean:
 	rm -rf ./bin ./vendor Gopkg.lock
 
 deploy-mentornity: clean build
-	serverless deploy --stage mentornity --region eu-central-1 --verbose
+	serverless deploy --config ./serverless-mentornity.yml --stage mentornity --region eu-central-1 --verbose
 
 teardown-mentornity: clean
-	serverless remove --stage mentornity --region eu-central-1 --verbose
+	serverless remove --config ./serverless-mentornity.yml --stage mentornity --region eu-central-1 --verbose
 
 deploy-devingen: clean build
 	serverless deploy --stage devingen --region eu-central-1 --verbose
 
 teardown-devingen: clean
 	serverless remove --stage devingen --region eu-central-1 --verbose
+
+deploy-devingen-dev: clean build
+	serverless deploy --stage dev --region ca-central-1 --verbose
+
+teardown-devingen-dev: clean
+	serverless remove --stage dev --region ca-central-1 --verbose
