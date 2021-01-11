@@ -1,11 +1,14 @@
 package dto
 
-import "github.com/devingen/api-core/model"
+import (
+	"github.com/devingen/api-core/model"
+)
 
 type QueryRequest struct {
-	Base        string
-	Collection  string
-	QueryConfig *model.QueryConfig
+	Base                string
+	Collection          string
+	QueryConfig         *model.QueryConfig
+	AuthorizationHeader string
 }
 
 type QueryResponse struct {

@@ -11,6 +11,7 @@ provider:
     MONGO_ADDRESS: ${param:MONGO_ADDRESS}
     MONGO_USERNAME: ${param:MONGO_USERNAME}
     MONGO_PASSWORD: ${param:MONGO_PASSWORD}
+    DATA_API_WEB_HOOK_ADDRESS: ${param:DATA_API_WEB_HOOK_ADDRESS}
 
 package:
   exclude:
@@ -33,3 +34,18 @@ functions:
               paths:
                 base: true
                 collection: true
+
+  update:
+    handler: bin/update
+    timeout: 45
+    events:
+      - http:
+          path: /{base}/{collection}/{id}/update
+          method: post
+          cors: true
+          request:
+            parameters:
+              paths:
+                base: true
+                collection: true
+                id: true

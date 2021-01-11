@@ -16,6 +16,7 @@ func NewHttpServiceHandler(atamaController controller.DataController) ServerHand
 
 	handler.Router = mux.NewRouter()
 	handler.Router.HandleFunc("/{base}/{collection}/query", handler.Query).Methods(http.MethodPost)
+	handler.Router.HandleFunc("/{base}/{collection}/{id}/update", handler.Update).Methods(http.MethodPost)
 
 	return handler
 }

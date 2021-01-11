@@ -6,7 +6,6 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	coreaws "github.com/devingen/api-core/aws"
-	coremodel "github.com/devingen/api-core/model"
 	"github.com/devingen/api-core/util"
 	"github.com/devingen/data-api/aws"
 	"github.com/devingen/data-api/controller"
@@ -23,16 +22,17 @@ func main() {
 
 	lambda.Start(func(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-		var config coremodel.QueryConfig
+		var config dto.UpdateConfig
 		err := json.Unmarshal([]byte(req.Body), &config)
 		if err != nil {
 			return events.APIGatewayProxyResponse{}, err
 		}
 
-		result, err := serviceController.Query(&dto.QueryRequest{
+		result, err := serviceController.Update(&dto.UpdateRequest{
 			Base:                req.PathParameters["base"],
 			Collection:          req.PathParameters["collection"],
-			QueryConfig:         &config,
+			ID:                  req.PathParameters["id"],
+			UpdateConfig:        &config,
 			AuthorizationHeader: req.Headers["Authorization"],
 		})
 		response, err := util.BuildResponse(http.StatusOK, result, err)
