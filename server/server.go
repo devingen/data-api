@@ -25,7 +25,7 @@ func main() {
 	h := handler.NewHttpServiceHandler(serviceController)
 
 	http.Handle("/", &cm.CORSRouterDecorator{R: h.Router})
-	err = http.ListenAndServe(":1003", &cm.CORSRouterDecorator{R: h.Router})
+	err = http.ListenAndServe(":80", &cm.CORSRouterDecorator{R: h.Router})
 	if err != nil {
 		log.Fatalf("Listen and serve failed %s", err.Error())
 	}
