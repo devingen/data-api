@@ -7,5 +7,5 @@ import (
 
 func main() {
 	serviceController, wrap := aws.InitDeps()
-	lambda.Start(wrap(serviceController.Update))
+	lambda.Start(wrap(serviceController.Delete))
 }

@@ -2,7 +2,7 @@ org: devingen
 app: mentornity
 service: data-api
 
-frameworkVersion: ^3.23.0
+frameworkVersion: ^3.22.0
 
 provider:
   name: aws

@@ -37,9 +37,13 @@ go test ./integrationtests/...
 
 This commands executes the command in `Makefile` which clears the previous builds,
 generates executables and deploys the AWS Functions through Serverless Framework.
-```
+```shell
 make deploy-mentornity
+```
+```shell
 make deploy-devingen
+```
+```shell
 make deploy-devingen-dev
 ```
 

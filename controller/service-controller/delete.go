@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func (controller ServiceController) Update(ctx context.Context, req core.Request) (*core.Response, error) {
+func (controller ServiceController) Delete(ctx context.Context, req core.Request) (*core.Response, error) {
 
 	_, webhookStatusCode, webhookError := controller.WebhookService.Pre(ctx, req)
 	if webhookError != nil {
@@ -15,12 +15,6 @@ func (controller ServiceController) Update(ctx context.Context, req core.Request
 			StatusCode: webhookStatusCode,
 			Body:       webhookError,
 		}, nil
-	}
-
-	var body dto.UpdateConfig
-	err := req.AssertBody(&body)
-	if err != nil {
-		return nil, err
 	}
 
 	base, hasBase := req.PathParameters["base"]
@@ -38,13 +32,13 @@ func (controller ServiceController) Update(ctx context.Context, req core.Request
 		return nil, core.NewError(http.StatusBadRequest, "id-missing")
 	}
 
-	updated, revision, err := controller.DataService.Update(ctx, base, collection, id, &body)
+	_, _, err := controller.DataService.Delete(ctx, base, collection, id)
 	if err != nil {
 		return nil, err
 	}
 
 	return &core.Response{
 		StatusCode: http.StatusOK,
-		Body:       dto.UpdateResponse{Updated: updated, Revision: revision},
+		Body:       dto.DeleteResponse{},
 	}, nil
 }

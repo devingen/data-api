@@ -1,8 +1,13 @@
 package controller
 
-import "github.com/devingen/data-api/dto"
+import (
+	"context"
+	core "github.com/devingen/api-core"
+)
 
-type DataController interface {
-	Query(request *dto.QueryRequest) (dto.QueryResponse, error)
-	Update(request *dto.UpdateRequest) (dto.UpdateResponse, error)
+type IServiceController interface {
+	Query(ctx context.Context, req core.Request) (*core.Response, error)
+	Create(ctx context.Context, req core.Request) (*core.Response, error)
+	Update(ctx context.Context, req core.Request) (*core.Response, error)
+	Delete(ctx context.Context, req core.Request) (*core.Response, error)
 }

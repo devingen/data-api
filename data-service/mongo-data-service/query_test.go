@@ -1,4 +1,4 @@
-package database_service
+package mongo_data_service
 
 import (
 	coremodel "github.com/devingen/api-core/model"

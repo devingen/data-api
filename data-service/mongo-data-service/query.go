@@ -1,6 +1,7 @@
-package database_service
+package mongo_data_service
 
 import (
+	"context"
 	coremodel "github.com/devingen/api-core/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -473,7 +474,7 @@ func (q *QueryPipeline) AddCollectionLookup(fields []coremodel.Field, ref coremo
 // BasicQuery doesn't generate metadata. It applies the skip and filter before the
 // relational fields are retrieved so it's more efficient than the AdvancedQuery.
 // It doesn't support sorting the main list based on the retrieved relations.
-func (service DatabaseService) BasicQuery(
+func (service MongoDataService) BasicQuery(ctx context.Context,
 	base, collection string, config *coremodel.QueryConfig,
 ) ([]*coremodel.DataModel, *coremodel.Meta, error) {
 	pipeline := NewPipeline()
@@ -515,7 +516,7 @@ func (service DatabaseService) BasicQuery(
 	}
 
 	result := make([]*coremodel.DataModel, 0)
-	err := service.Database.Aggregate(base, collection, pipeline, func(cur *mongo.Cursor) error {
+	err := service.Database.Aggregate(ctx, base, collection, pipeline, func(cur *mongo.Cursor) error {
 
 		var data coremodel.DataModel
 		err := cur.Decode(&data)
@@ -532,7 +533,7 @@ func (service DatabaseService) BasicQuery(
 // AdvancedQuery generates the metadata. However for doing that, it does the sorting,
 // skipping and limiting after the relational fields are retrieved so it becomes memory
 // inefficient for some complex requests.
-func (service DatabaseService) AdvancedQuery(
+func (service MongoDataService) AdvancedQuery(ctx context.Context,
 	base, collection string, config *coremodel.QueryConfig,
 ) ([]*coremodel.DataModel, *coremodel.Meta, error) {
 
@@ -568,7 +569,7 @@ func (service DatabaseService) AdvancedQuery(
 	pipeline.AddLimitWithMeta(config.Limit)
 
 	var response AggregateResult
-	err := service.Database.Aggregate(base, collection, pipeline, func(cur *mongo.Cursor) error {
+	err := service.Database.Aggregate(ctx, base, collection, pipeline, func(cur *mongo.Cursor) error {
 
 		err := cur.Decode(&response)
 		if err != nil {
@@ -601,12 +602,12 @@ func PickQueryType(config *coremodel.QueryConfig) QueryType {
 	return QueryTypeBasic
 }
 
-func (service DatabaseService) Query(
+func (service MongoDataService) Query(ctx context.Context,
 	base, collection string, config *coremodel.QueryConfig,
 ) ([]*coremodel.DataModel, *coremodel.Meta, error) {
 
 	if PickQueryType(config) == QueryTypeBasic {
-		return service.BasicQuery(base, collection, config)
+		return service.BasicQuery(ctx, base, collection, config)
 	}
-	return service.AdvancedQuery(base, collection, config)
+	return service.AdvancedQuery(ctx, base, collection, config)
 }

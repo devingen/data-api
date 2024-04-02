@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func (controller ServiceController) Update(ctx context.Context, req core.Request) (*core.Response, error) {
+func (controller ServiceController) Create(ctx context.Context, req core.Request) (*core.Response, error) {
 
 	_, webhookStatusCode, webhookError := controller.WebhookService.Pre(ctx, req)
 	if webhookError != nil {
@@ -17,7 +17,7 @@ func (controller ServiceController) Update(ctx context.Context, req core.Request
 		}, nil
 	}
 
-	var body dto.UpdateConfig
+	var body dto.CreateConfig
 	err := req.AssertBody(&body)
 	if err != nil {
 		return nil, err
@@ -33,18 +33,13 @@ func (controller ServiceController) Update(ctx context.Context, req core.Request
 		return nil, core.NewError(http.StatusInternalServerError, "collection-missing-in-path")
 	}
 
-	id, hasID := req.PathParameters["id"]
-	if !hasID {
-		return nil, core.NewError(http.StatusBadRequest, "id-missing")
-	}
-
-	updated, revision, err := controller.DataService.Update(ctx, base, collection, id, &body)
+	id, revision, err := controller.DataService.Create(ctx, base, collection, &body)
 	if err != nil {
 		return nil, err
 	}
 
 	return &core.Response{
-		StatusCode: http.StatusOK,
-		Body:       dto.UpdateResponse{Updated: updated, Revision: revision},
+		StatusCode: http.StatusCreated,
+		Body:       dto.CreateResponse{ID: id, Revision: revision},
 	}, nil
 }

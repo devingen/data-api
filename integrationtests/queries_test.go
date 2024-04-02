@@ -4,7 +4,7 @@ import (
 	"github.com/devingen/api-core/database"
 	coremodel "github.com/devingen/api-core/model"
 	"github.com/devingen/api-core/util"
-	"github.com/devingen/data-api/service"
+	"github.com/devingen/data-api/data-service"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"log"
@@ -13,7 +13,7 @@ import (
 
 type QueriesTestSuite struct {
 	suite.Suite
-	service service.DataService
+	service data_service.DataService
 	base    string
 }
 
@@ -24,7 +24,7 @@ func TestQueries(t *testing.T) {
 	}
 
 	testSuite := &QueriesTestSuite{
-		service: service.NewDatabaseService(db),
+		service: data_service.NewDatabaseService(db),
 		base:    "dvn-data-api-integration-test",
 	}
 
