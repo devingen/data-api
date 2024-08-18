@@ -16,24 +16,6 @@ zip:
 clean:
 	rm -rf ./bin ./vendor Gopkg.lock
 
-deploy-adatlas: clean build zip
-	serverless deploy --config ./serverless-adatlas.yml --stage adatlas-prod --region eu-central-1 --verbose
-
-teardown-adatlas: clean
-	serverless remove --config ./serverless-adatlas.yml --stage adatlas-prod --region eu-central-1 --verbose
-
-deploy-mentornity: clean build
-	serverless deploy --config ./serverless-mentornity.yml --stage prod --region eu-central-1 --verbose
-
-teardown-mentornity: clean
-	serverless remove --config ./serverless-mentornity.yml --stage prod --region eu-central-1 --verbose
-
-deploy-mentornity-qa: clean build
-	serverless deploy --config ./serverless-mentornity.yml --stage qa --region eu-central-1 --verbose
-
-teardown-mentornity-qa: clean
-	serverless remove --config ./serverless-mentornity.yml --stage qa --region eu-central-1 --verbose
-
 deploy-devingen: clean build zip
 	serverless deploy --stage prod --region eu-central-1 --verbose
 
