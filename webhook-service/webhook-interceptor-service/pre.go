@@ -3,9 +3,10 @@ package http_webhook_service
 import (
 	"context"
 	"encoding/json"
-	"github.com/devingen/data-api/dto"
 	"net/http"
 	"net/url"
+
+	"github.com/devingen/data-api/dto"
 
 	core "github.com/devingen/api-core"
 )
@@ -38,7 +39,7 @@ func (service WebhookInterceptorService) Pre(ctx context.Context, req core.Reque
 	if err != nil {
 		switch err.(type) {
 		case *url.Error:
-			return nil, http.StatusInternalServerError, core.NewError(http.StatusInternalServerError, "webhook-api-is-unreachable")
+			return nil, http.StatusInternalServerError, core.NewError(http.StatusInternalServerError, "webhook-api-error:"+err.Error())
 		}
 		return nil, resp.StatusCode(), err
 	}

@@ -1,10 +1,11 @@
 package main
 
 import (
-	api_server "github.com/devingen/data-api/api-server"
-	"github.com/devingen/data-api/config"
 	"log"
 	"net/http"
+
+	api_server "github.com/devingen/data-api/api-server"
+	"github.com/devingen/data-api/config"
 
 	"github.com/devingen/api-core/database"
 	"github.com/kelseyhightower/envconfig"
@@ -17,6 +18,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	log.Println("Running server on port", appConfig.Port)
 
 	db, err := database.New(appConfig.Mongo.URI)
 	if err != nil {
