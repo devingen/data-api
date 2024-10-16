@@ -1,29 +1,16 @@
-.PHONY: build clean deploy
+REPO_NAME  := devingen/veri-api
+IMAGE_TAG  := 0.1.0
 
-build:
+.PHONY: build-docker
+build-docker:
+	@echo "Building Docker image"
 	export GO111MODULE=on
-	env GOARCH=arm64 GOOS=linux go build -ldflags="-s -w" -o bin/create/bootstrap aws/create/main.go
-	env GOARCH=arm64 GOOS=linux go build -ldflags="-s -w" -o bin/update/bootstrap aws/update/main.go
-	env GOARCH=arm64 GOOS=linux go build -ldflags="-s -w" -o bin/delete/bootstrap aws/delete/main.go
-	env GOARCH=arm64 GOOS=linux go build -ldflags="-s -w" -o bin/query/bootstrap aws/query/main.go
+	docker buildx build --platform linux/amd64 -t $(REPO_NAME):$(IMAGE_TAG) .
 
-zip:
-	zip -j bin/create.zip bin/create/bootstrap
-	zip -j bin/update.zip bin/update/bootstrap
-	zip -j bin/delete.zip bin/delete/bootstrap
-	zip -j bin/query.zip bin/query/bootstrap
+.PHONY: push-docker
+push-docker:
+	@echo "Pushing Docker image"
+	docker push $(REPO_NAME):$(IMAGE_TAG)
 
-clean:
-	rm -rf ./bin ./vendor Gopkg.lock
-
-deploy-devingen: clean build zip
-	serverless deploy --stage prod --region eu-central-1 --verbose
-
-teardown-devingen: clean
-	serverless remove --stage prod --region eu-central-1 --verbose
-
-deploy-devingen-dev: clean build
-	serverless deploy --stage dev --region ca-central-1 --verbose
-
-teardown-devingen-dev: clean
-	serverless remove --stage dev --region ca-central-1 --verbose
+.PHONY: release-docker
+release-docker: build-docker push-docker
