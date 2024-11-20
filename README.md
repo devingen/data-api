@@ -12,5 +12,5 @@ git tag --list
 Create a new release.
 
 ```
-make release VERSION=0.0.1
+make release VERSION=0.0.2
 ```
