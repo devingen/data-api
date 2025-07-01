@@ -2,7 +2,7 @@ module github.com/devingen/data-api
 
 go 1.22
 
-replace github.com/devingen/api-core => ../api-core
+//replace github.com/devingen/api-core => ../api-core
 
 require (
 	github.com/aws/aws-lambda-go v1.46.0

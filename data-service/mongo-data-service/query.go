@@ -69,10 +69,23 @@ func (q *QueryPipeline) AddMatch(config *coremodel.QueryConfig) {
 func (q *QueryPipeline) AddReference(fields []coremodel.Field, ref coremodel.ReferenceField) {
 	*q = append(*q, bson.M{
 		"$lookup": bson.M{
-			"from":         ref.GetOtherCollection(),
-			"localField":   ref.GetID() + "._id",
-			"foreignField": "_id",
-			"as":           ref.GetID(),
+			"from": ref.GetOtherCollection(),
+			"let": bson.M{
+				"localId": bson.M{"$toString": "$" + ref.GetID() + "._id"},
+			},
+			"pipeline": []bson.M{
+				{
+					"$match": bson.M{
+						"$expr": bson.M{
+							"$eq": []interface{}{
+								bson.M{"$toString": "$_id"},
+								"$$localId",
+							},
+						},
+					},
+				},
+			},
+			"as": ref.GetID(),
 		},
 	})
 
