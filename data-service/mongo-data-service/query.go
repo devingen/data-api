@@ -542,9 +542,11 @@ func (service MongoDataService) BasicQuery(ctx context.Context,
 	}
 
 	if config.Sort != nil {
+		combinedSort := bson.M{}
 		for _, sort := range config.Sort {
-			pipeline.AddSort(sort.ID, sort.Order)
+			combinedSort[sort.ID] = sort.Order
 		}
+		pipeline = append(pipeline, bson.M{"$sort": combinedSort})
 	}
 
 	pipeline.AddSkip(config.Skip)
@@ -568,9 +570,11 @@ func (service MongoDataService) BasicQuery(ctx context.Context,
 
 	// do the sorting again because the pipelines above may change the order
 	if config.Sort != nil {
+		combinedSort := bson.M{}
 		for _, sort := range config.Sort {
-			pipeline.AddSort(sort.ID, sort.Order)
+			combinedSort[sort.ID] = sort.Order
 		}
+		pipeline = append(pipeline, bson.M{"$sort": combinedSort})
 	}
 
 	result := make([]*coremodel.DataModel, 0)
@@ -614,9 +618,11 @@ func (service MongoDataService) AdvancedQuery(ctx context.Context,
 	}
 
 	if config.Sort != nil {
+		combinedSort := bson.M{}
 		for _, sort := range config.Sort {
-			pipeline.AddSort(sort.ID, sort.Order)
+			combinedSort[sort.ID] = sort.Order
 		}
+		pipeline = append(pipeline, bson.M{"$sort": combinedSort})
 	}
 
 	pipeline.AddSkip(config.Skip)
