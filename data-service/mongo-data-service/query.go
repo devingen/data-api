@@ -2,6 +2,7 @@ package mongo_data_service
 
 import (
 	"context"
+
 	coremodel "github.com/devingen/api-core/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -71,15 +72,59 @@ func (q *QueryPipeline) AddReference(fields []coremodel.Field, ref coremodel.Ref
 		"$lookup": bson.M{
 			"from": ref.GetOtherCollection(),
 			"let": bson.M{
-				"localId": bson.M{"$toString": "$" + ref.GetID() + "._id"},
+				"raw": "$" + ref.GetID() + "._id",
 			},
 			"pipeline": []bson.M{
 				{
 					"$match": bson.M{
 						"$expr": bson.M{
-							"$eq": []interface{}{
-								bson.M{"$toString": "$_id"},
-								"$$localId",
+							"$in": []interface{}{
+								bson.M{"$toString": "$_id"}, // compare as strings
+								bson.M{
+									"$let": bson.M{
+										"vars": bson.M{"val": "$$raw"},
+										"in": bson.M{
+											"$cond": []interface{}{
+												// If val is an array, flatten one level and stringify elements.
+												bson.M{"$isArray": "$$val"},
+												bson.M{
+													"$reduce": bson.M{
+														"input":        "$$val",
+														"initialValue": bson.A{},
+														"in": bson.M{
+															"$concatArrays": bson.A{
+																"$$value",
+																bson.M{
+																	"$cond": []interface{}{
+																		// If an element is an array, map its elements (one-level flatten).
+																		bson.M{"$isArray": "$$this"},
+																		bson.M{
+																			"$map": bson.M{
+																				"input": "$$this",
+																				"as":    "x",
+																				"in":    bson.M{"$toString": "$$x"}, // will throw if x is an array/object
+																			},
+																		},
+																		// Else wrap and stringify the element.
+																		bson.A{bson.M{"$toString": "$$this"}},
+																	},
+																},
+															},
+														},
+													},
+												},
+												// Else (scalar or null/missing): if non-null → [toString(val)], else []
+												bson.M{
+													"$cond": []interface{}{
+														bson.M{"$ne": bson.A{"$$val", nil}},
+														bson.A{bson.M{"$toString": "$$val"}}, // will throw if val is an object/array
+														bson.A{},
+													},
+												},
+											},
+										},
+									},
+								},
 							},
 						},
 					},
