@@ -14,6 +14,8 @@ github.com/devingen/api-core v0.1.3 h1:zTOxBa4hDBzFvo2+OV1X50iUZ2C+oYTQTSwR/2qK7
 github.com/devingen/api-core v0.1.3/go.mod h1:iGKmrdTJPzWbqCWXtVfnB6N5/kPirADKPbWCRvX89kA=
 github.com/devingen/api-core v0.1.4 h1:ji9xErd7hXhj9ZpjOg+35vyt58x4PD6UYDMzIt3blXI=
 github.com/devingen/api-core v0.1.4/go.mod h1:iGKmrdTJPzWbqCWXtVfnB6N5/kPirADKPbWCRvX89kA=
+github.com/devingen/api-core v0.1.5 h1:kZ1z7cQXoCrOO6oQ3f3nqAaM3F+mdbCAt/hdsqVxRTo=
+github.com/devingen/api-core v0.1.5/go.mod h1:iGKmrdTJPzWbqCWXtVfnB6N5/kPirADKPbWCRvX89kA=
 github.com/go-playground/assert/v2 v2.0.1 h1:MsBgLAaY856+nPRTKrp3/OZK38U/wa0CcBYNjji3q3A=
 github.com/go-playground/assert/v2 v2.0.1/go.mod h1:VDjEfimB/XKnb+ZQfWdccd7VUvScMdVu0Titje2rxJ4=
 github.com/go-playground/locales v0.13.0 h1:HyWk6mgj5qFqCT5fjGBuRArbVDfE4hi8+e8ceBS/t7Q=
