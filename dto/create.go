@@ -8,8 +8,9 @@ type CreateRequest struct {
 }
 
 type CreateConfig struct {
-	Operation string      `json:"operation"`
-	Data      interface{} `json:"data"`
+	Operation *string            `json:"operation"`
+	Data      interface{}        `json:"data"`
+	Types     *map[string]string `json:"types"`
 }
 
 type CreateResponse struct {

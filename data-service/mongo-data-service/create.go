@@ -2,9 +2,10 @@ package mongo_data_service
 
 import (
 	"context"
+	"time"
+
 	"github.com/devingen/data-api/dto"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"time"
 )
 
 func (service MongoDataService) Create(ctx context.Context, base, collection string, config *dto.CreateConfig) (string, int, error) {
@@ -17,6 +18,13 @@ func (service MongoDataService) Create(ctx context.Context, base, collection str
 	if item, ok := config.Data.(map[string]interface{}); ok {
 		for k, v := range item {
 			data[k] = v
+		}
+	}
+
+	if config.Types != nil {
+		types := *config.Types
+		if idType, hasIDType := types["_id"]; hasIDType && idType == "string" {
+			data["_id"] = primitive.NewObjectID().Hex()
 		}
 	}
 
