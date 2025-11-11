@@ -1,5 +1,5 @@
 REPO_NAME := devingen/veri-api
-IMAGE_TAG := 0.1.5
+IMAGE_TAG := 0.1.9
 
 .PHONY: build-docker
 build-docker:

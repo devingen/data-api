@@ -2,21 +2,40 @@ package mongo_data_service
 
 import (
 	"context"
+	"strconv"
+	"time"
+
 	"github.com/devingen/data-api/dto"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"strconv"
 )
 
 func (service MongoDataService) Update(ctx context.Context, base, collection, id string, config *dto.UpdateConfig) (string, int, error) {
 
+	data := map[string]interface{}{
+		"_updated": time.Now(),
+	}
+	if item, ok := config.Data.(map[string]interface{}); ok {
+		for k, v := range item {
+			data[k] = v
+		}
+	}
+
+	err := service.processData(ctx, base, collection, false, data)
+	if err != nil {
+		return "", 0, err
+	}
+
+	update := bson.D{
+		{"$inc", bson.M{"_revision": 1}},
+		{"$set", data},
+	}
+
 	coll := service.Database.Client.Database(base).Collection(collection)
 	result, err := coll.UpdateOne(
-		context.Background(),
+		ctx,
 		bson.M{"_id": id},
-		bson.D{
-			{"$set", config.Data},
-		},
+		update,
 	)
 
 	if result.ModifiedCount == 0 {
@@ -28,11 +47,9 @@ func (service MongoDataService) Update(ctx context.Context, base, collection, id
 		}
 
 		result, err = coll.UpdateOne(
-			context.Background(),
+			ctx,
 			bson.M{"_id": oid},
-			bson.D{
-				{"$set", config.Data},
-			},
+			update,
 		)
 	}
 

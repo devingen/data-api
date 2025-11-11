@@ -2,8 +2,10 @@ package data_service
 
 import (
 	"context"
+
 	coremodel "github.com/devingen/api-core/model"
 	"github.com/devingen/data-api/dto"
+	"github.com/devingen/data-api/model"
 )
 
 type IDataService interface {
@@ -11,4 +13,5 @@ type IDataService interface {
 	Update(ctx context.Context, base, collection, id string, config *dto.UpdateConfig) (string, int, error)
 	Create(ctx context.Context, base, collection string, config *dto.CreateConfig) (string, int, error)
 	Delete(ctx context.Context, base, collection, id string) (string, int, error)
+	GetTableConfig(ctx context.Context, base, collection string) (*model.TableConfig, error)
 }
