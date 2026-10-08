@@ -588,8 +588,34 @@ func (service MongoDataService) BasicQuery(ctx context.Context,
 		result = append(result, &data)
 		return nil
 	})
+	if err != nil {
+		return result, nil, err
+	}
 
-	return result, nil, err
+	// The total is only counted for the first page; clients keep it while paging.
+	var meta *coremodel.Meta
+	if config.Skip == 0 {
+		meta, err = service.count(ctx, base, collection, config)
+	}
+
+	return result, meta, err
+}
+
+// count returns the number of documents matching the query filter, ignoring skip and limit.
+func (service MongoDataService) count(ctx context.Context,
+	base, collection string, config *coremodel.QueryConfig,
+) (*coremodel.Meta, error) {
+	pipeline := NewPipeline()
+	if config.Filter != nil {
+		pipeline.AddMatch(config)
+	}
+	pipeline = append(pipeline, bson.M{"$count": "total"})
+
+	meta := &coremodel.Meta{Total: 0}
+	err := service.Database.Aggregate(ctx, base, collection, pipeline, func(cur *mongo.Cursor) error {
+		return cur.Decode(meta)
+	})
+	return meta, err
 }
 
 // AdvancedQuery generates the metadata. However for doing that, it does the sorting,
